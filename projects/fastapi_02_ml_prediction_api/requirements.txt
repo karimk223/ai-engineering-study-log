@@ -1,0 +1,9 @@
+-c requirements.lock.txt
+fastapi
+pydantic
+uvicorn
+httpx
+pytest
+pandas
+scikit-learn
+joblib

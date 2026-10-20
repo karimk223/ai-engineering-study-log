@@ -7,7 +7,7 @@ A collection of small applications built through guided practice in APIs, data s
 | Project | Status | What it demonstrates |
 | --- | --- | --- |
 | [Customer Requests API](projects/fastapi_01_customer_requests/README.md) | Implementation and setup verified | FastAPI, SQLite, validation, CRUD, pagination and isolated tests |
-| ML ticket-routing API | Next | Classifying customer messages, model evaluation and API predictions |
+| [ML ticket-routing API](projects/fastapi_02_ml_prediction_api/README.md) | Local implementation verified; 16 cases pass | Text classification, saved-model serving, SQLite logging and result retrieval |
 | LLM/tools API | Planned | Structured model responses, controlled tool calls and failure handling |
 
 The first project has 51 passing cases in the original, fresh-installation and grouped-project environments. Its own environment passes pip check, and the local server starts successfully from the grouped directory.
@@ -27,10 +27,23 @@ ai-engineering-study-log/
       NOTES.md
       requirements.txt
       requirements.lock.txt
+    fastapi_02_ml_prediction_api/
+      app/
+      tests/
+      inspect_data.py
+      prepare_data_full.py
+      split_data_full.py
+      train_model_full.py
+      README.md
+      NOTES.md
+      EVALUATION.md
+      requirements.txt
+      requirements.lock.txt
+      data/SOURCE.md
 ```
 
 Run setup and test commands from the chosen project's directory. Dependencies and environments are separate for each application.
 
 [Study log](STUDY-LOG.md) records completed work and checks. The larger ingestion/RAG/agents engine and Odoo automation lab are planned as separate repositories.
 
-Current work is local. GitHub publication is pending. The current API has no AI model, authentication or cloud deployment; later project entries are plans rather than completed skills.
+The [first API milestone](https://github.com/karimk223/ai-engineering-study-log/commit/c48a4db792f6600f752b36d8c557e2bf2da4eeeb) is published. The second project has 99.70% final-test accuracy on its hybrid synthetic corpus, saved-model serving, SQLite logging, GET-by-ID and 16 passing cases; its commit/push is pending. A clean-file rebuild using its existing pinned environment reproduces the model and tests; it was not a separate fresh dependency installation. Unused classifier/review experiments are archived outside this repository's active project. Neither API has authentication or cloud deployment; the classifier does not reliably reject arbitrary unsupported input. Unfinished project entries are plans rather than completed skills.

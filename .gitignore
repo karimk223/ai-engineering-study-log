@@ -12,3 +12,6 @@ __pycache__/
 private_data/
 storage/
 .DS_Store
+projects/fastapi_02_ml_prediction_api/data/raw/
+projects/fastapi_02_ml_prediction_api/data/processed/
+projects/fastapi_02_ml_prediction_api/artifacts/
