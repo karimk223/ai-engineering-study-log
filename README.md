@@ -8,7 +8,7 @@ A collection of small applications built through guided practice in APIs, data s
 | --- | --- | --- |
 | [Customer Requests API](projects/fastapi_01_customer_requests/README.md) | Implementation and setup verified | FastAPI, SQLite, validation, CRUD, pagination and isolated tests |
 | [ML ticket-routing API](projects/fastapi_02_ml_prediction_api/README.md) | Local implementation verified; 16 cases pass | Text classification, saved-model serving, SQLite logging and result retrieval |
-| LLM/tools API | Planned | Structured model responses, controlled tool calls and failure handling |
+| [LLM/tools API](projects/fastapi_03_llm_tools_api/README.md) | Local implementation verified; 56 cases pass | Hosted LLM, validated native tool calls, checked JSON replies, atomic SQLite logging and failure handling |
 
 The first project has 51 passing cases in the original, fresh-installation and grouped-project environments. Its own environment passes pip check, and the local server starts successfully from the grouped directory.
 
@@ -40,10 +40,23 @@ ai-engineering-study-log/
       requirements.txt
       requirements.lock.txt
       data/SOURCE.md
+    fastapi_03_llm_tools_api/
+      app/
+      tests/
+      check_llm.py
+      .env.example
+      README.md
+      NOTES.md
+      requirements.txt
+      requirements.lock.txt
 ```
 
 Run setup and test commands from the chosen project's directory. Dependencies and environments are separate for each application.
 
 [Study log](STUDY-LOG.md) records completed work and checks. The larger ingestion/RAG/agents engine and Odoo automation lab are planned as separate repositories.
 
-The [first API milestone](https://github.com/karimk223/ai-engineering-study-log/commit/c48a4db792f6600f752b36d8c557e2bf2da4eeeb) is published. The second project has 99.70% final-test accuracy on its hybrid synthetic corpus, saved-model serving, SQLite logging, GET-by-ID and 16 passing cases; its commit/push is pending. A clean-file rebuild using its existing pinned environment reproduces the model and tests; it was not a separate fresh dependency installation. Unused classifier/review experiments are archived outside this repository's active project. Neither API has authentication or cloud deployment; the classifier does not reliably reject arbitrary unsupported input. Unfinished project entries are plans rather than completed skills.
+The [first API milestone](https://github.com/karimk223/ai-engineering-study-log/commit/c48a4db792f6600f752b36d8c557e2bf2da4eeeb) is published. The second project's implementation is recorded in commit `c666b9d`: 99.70% final-test accuracy on its hybrid synthetic corpus, saved-model serving, SQLite logging, GET-by-ID and 16 passing cases. A clean-file rebuild using its existing pinned environment reproduces the model and tests; it was not a separate fresh dependency installation. Unused classifier/review experiments are archived outside this repository's active project.
+
+The third project uses a Groq-hosted model without a local model download. It allows one read-only fictional order lookup and at most two model requests, validates the final reply format, saves completed exchanges and tool traces together, and retrieves saved chats without inference. All 56 cases pass in its own environment and a clean source copy using that same environment. The 25 dependency versions are recorded; a separate fresh dependency installation was not performed. Offline tests use no real credential or provider quota.
+
+These are local learning applications, not authenticated cloud deployments. The classifier does not reliably reject arbitrary unsupported input, and API 3's controlled-response tests are not a real-model accuracy score. Its saved logs are not conversation memory. Further study-log projects remain planned rather than completed skills; see each project's README for exact scope and limitations.

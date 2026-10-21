@@ -1,0 +1,8 @@
+-c requirements.lock.txt
+fastapi
+groq
+httpx
+pydantic
+pytest
+python-dotenv
+uvicorn
