@@ -135,3 +135,17 @@ Recorded 25 installed dependency versions in requirements.lock.txt, excluding pi
 A temporary clean copy of only source, tests, documentation and public configuration also passes all 56 cases in the existing pinned environment. Imports were verified to resolve to the copied application, with no real .env, database, bundled environment or copied caches. The check made no live model call and temporary copies were removed automatically. This is clean-file verification, not a separate fresh dependency installation.
 
 API 3 is ready for final local Git review and learner-controlled publication. No API-3 staging, commit or push was performed by the assistant. The rest of the study-log roadmap remains separate unfinished work; no new model, rejection gate, paid upgrade or extra course was added to this API milestone.
+
+## October 21–22, 2026 — Computer vision local milestone
+
+Karim implemented three scripts under projects/computer_vision_demo: OpenCV half-size/grayscale preprocessing, pretrained YuNet detection with green bounding boxes, and DeepFace pairwise verification using ArcFace's 512-number embeddings with ONNX Runtime on the CPU. No detector or embedding model was trained. Manual runs produced the saved image transformations, one detected face and a two-photo match prediction. These sample results are not a general accuracy benchmark or proof of identity.
+
+The standalone YuNet detector and DeepFace's OpenCV/Haar detection backend are separate. Learned embeddings are not human-readable face measurements. The installed ArcFace/cosine default is 0.68; distance below or equal to that cutoff predicts a match, not a confidence percentage. Threshold calibration, gallery identification, liveness checks and access authorization are outside this exercise.
+
+Karim wrote eight application test methods: three preprocessing cases, two controlled detector cases and three controlled comparison cases. The last group includes five missing-file subcases inside one method. Actual saved-file execution passes all eight. Tests use synthetic images, temporary files, patched paths and fake model replies; they do not load face models or measure recognition accuracy.
+
+The 26 recorded package versions match the working environment and pip check passes. Werkzeug is explicit because an actual import exposed an undeclared dependency in the installed DeepFace release. Exactly one OpenCV distribution provides cv2. A separate fresh dependency installation has not been validated.
+
+A temporary clean copy containing only the six Python files, dependency manifests, documentation and checksum manifest also passes all eight tests using the existing interpreter. Imports resolve to the copied sources; no private_data, storage, environment or real DeepFace module is needed. The temporary copy was automatically removed afterward. This is clean-file verification, not a fresh dependency installation.
+
+Added project setup/run/test documentation, learning notes and a four-artifact SHA256 manifest. Download links point to upstream YuNet, ArcFace and pinned OpenCV Haar data. Personal photos, outputs, weights, wheels and environments stay ignored; no personal photos or embeddings are included in the public-source files. Application/test/dependency sources were not changed by documentation work. This milestone remains local pending learner-controlled Git review/publication; the rest of repo 1 is not complete.

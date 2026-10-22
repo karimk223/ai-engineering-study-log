@@ -1,0 +1,6 @@
+-c requirements.lock.txt
+deepface
+numpy
+onnxruntime
+opencv-contrib-python-headless
+Werkzeug
