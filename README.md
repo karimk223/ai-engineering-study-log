@@ -12,6 +12,7 @@ A collection of small applications built through guided practice in APIs, data s
 | [Computer vision demo](projects/computer_vision_demo/README.md) | Local implementation verified; 8 application tests pass | OpenCV preprocessing, pretrained YuNet detection, DeepFace/ArcFace pairwise verification and isolated tests |
 | [Pretrained model demos](projects/pretrained_model_demos/README.md) | Local sentiment/Ollama calls verified; 8 application tests pass | Hugging Face sentiment, local Qwen generation, token limits, reply checks and documented limitations |
 | [Introductory ReAct-style agent](projects/llm_agent_demos/README.md) | Manual/automatic tool exchanges verified; 8 offline tests pass | Hosted model, local function registry, validated arguments, result handoff and bounded iteration |
+| [Compact ML notebook](notebooks/README.md) | Learner run from a restarted kernel verified in saved outputs | Iris inspection, baseline/tree comparison, K-Means grouping and PCA visualization |
 
 The first project has 51 passing cases in the original, fresh-installation and grouped-project environments. Its own environment passes pip check, and the local server starts successfully from the grouped directory.
 
@@ -22,6 +23,11 @@ ai-engineering-study-log/
   README.md
   STUDY-LOG.md
   .gitignore
+  notebooks/
+    ml_revision.ipynb
+    README.md
+    NOTES.md
+    requirements.txt
   projects/
     fastapi_01_customer_requests/
       app/
@@ -101,6 +107,8 @@ The sentiment exercise reuses a pinned DistilBERT checkpoint for six local Engli
 
 The same project also includes a standard-library Python client for local Qwen3:4b generation through Ollama. Four reply-helper tests pass without calling the service, making eight tests across both demos. The client bounds context/output and rejects unfinished/blank replies, but the tested model setup still produces unwanted planning-like text. An earlier completion failure's cause was not recorded and is not claimed fixed by later success. Ollama version/model identities and run instructions are documented; this client is not an agent, hosted deployment or representative model evaluation.
 
-The introductory ReAct-style exercise connects the existing Groq-hosted model to local integer multiplication. A manual version pauses before execution; an automatic loop uses returned results for later actions and permits at most three tool executions/four model requests. A learner-run two-action example calculated 432 items and 1296 dollars. Eight offline tests check selected tool and loop rules, including refusal before a fourth tool and refusal of unknown functions. These are not a general reasoning-accuracy benchmark. A 15-package observed runtime snapshot is recorded; no separate fresh installation was verified. Compact ML revision/experiments, small backend exercises and the final repository review remain planned.
+The introductory ReAct-style exercise connects the existing Groq-hosted model to local integer multiplication. A manual version pauses before execution; an automatic loop uses returned results for later actions and permits at most three tool executions/four model requests. A learner-run two-action example calculated 432 items and 1296 dollars. Eight offline tests check selected tool and loop rules, including refusal before a fourth tool and refusal of unknown functions. These are not a general reasoning-accuracy benchmark. A 15-package observed runtime snapshot is recorded; no separate fresh installation was verified.
+
+The compact ML notebook uses the bundled Iris measurements for separate prediction and exploration exercises. On a 120/30 training/test split, its baseline gets 10/30 correct and its depth-three decision tree gets 29/30. K-Means groups all 150 standardized rows into three requested groups of 53, 50 and 47. PCA supplies two coordinates per flower with 95.8% retained variance, and the chart colors those coordinates by the existing K-Means groups. Retained variance is separate from species-prediction accuracy. Four direct dependency versions and setup instructions are recorded. The learner completed notebook cleanup and a run from a restarted kernel; the seven saved code cells run in order without errors and retain the results and chart. Small backend exercises and the final repository review remain.
 
 These are local learning applications, not authenticated cloud deployments. The classifier does not reliably reject arbitrary unsupported input, and API 3's controlled-response tests are not a real-model accuracy score. Its saved logs are not conversation memory. The vision demo is not an identification gallery or liveness/access-control system. Further study-log projects remain planned rather than completed skills; see each project's README for exact scope and limitations.
