@@ -1,14 +1,14 @@
 # Pretrained model demos
 
-Two small local exercises: sentiment classification with Transformers/PyTorch, and text generation through Ollama's local API. Both reuse already-trained models; neither trains a model or implements an agent.
+Local sentiment classification with Transformers/PyTorch and text generation through Ollama's local API. Both use pretrained models.
 
 ## Implemented: local sentiment classification
 
 A small Python script loads an existing English sentiment model, checks six example sentences and prints POSITIVE or NEGATIVE with a model score. The model was trained by others; this project integrates it for local inference, not training or chatbot generation.
 
-The current lesson uses [DistilBERT fine-tuned on SST-2](https://huggingface.co/distilbert/distilbert-base-uncased-finetuned-sst-2-english) at revision `714eb0fa89d2f80546fda750413ed43d93601a13`. Transformers loads the tokenizer/model and PyTorch runs the calculations on the CPU. No hosted inference service, API key or paid model call is used.
+The script uses [DistilBERT fine-tuned on SST-2](https://huggingface.co/distilbert/distilbert-base-uncased-finetuned-sst-2-english) at revision `714eb0fa89d2f80546fda750413ed43d93601a13`. Transformers loads the tokenizer/model and PyTorch runs the calculations on the CPU. No hosted inference service, API key or paid model call is used.
 
-The Ollama exercise is documented below. ReAct and the remaining study-log roadmap exercises are separate next milestones, not implemented by these scripts.
+The Ollama client is documented below. Tool-using agents are implemented in the separate [ReAct-style agent project](../llm_agent_demos/README.md).
 
 ## Environment and dependencies
 
@@ -60,7 +60,7 @@ The script sets project-local cache paths and offline mode before importing Tran
 
 The six hard-coded sentences are processed together in one model call. Each must be nonblank and have at most 512 token IDs, including special markers. An invalid sentence raises `ValueError` and stops the whole batch before prediction. Weights currently load before those checks, so a loading progress bar can appear before an input error.
 
-Observed learner-run results, rounded to four decimals:
+Example inference results, rounded to four decimals:
 
 | Text | Prediction | Model score |
 | --- | --- | --- |
@@ -83,8 +83,6 @@ Four methods pass: short text accepted, blank/whitespace text rejected, exactly 
 
 The four tests also pass in a temporary clean source copy with no `storage` or `.venv`, using the existing project's interpreter. Both pretrained-loader methods were blocked during this check and were never called. This verifies test isolation, not a fresh dependency installation. The temporary copy was removed automatically.
 
-Manual checks also rejected a whitespace-only seventh sentence and a seventh sentence consisting of `This movie was good. ` repeated 150 times (752 tokens). That extra item was removed afterward. A prior tokenizer-only lesson showed 752 tokens shortened to 512; the long input was not forwarded through the model.
-
 ## Sentiment limitations and runtime evidence
 
 - This is a fixed-example batch script, not a deployed API, interactive chatbot, long-document workflow or feedback-training system.
@@ -93,13 +91,13 @@ Manual checks also rejected a whitespace-only seventh sentence and a seventh sen
 - A single-sentence CPU forward crashed with a native bus error in the installed-runtime preflight, at the model's pre-classification linear layer. Two- and six-sentence batches ran successfully. The cause is unresolved; batching is the demonstrated path, not a proven fix. Single-input deployment is not validated.
 - The passing unit tests do not exercise that native model-forward path. `pip check` checks declared dependency compatibility, not runtime correctness.
 
-Model files, caches and `.venv` remain ignored under the repository's existing rules. Only source, tests, dependency records, notes and checksums belong in Git. See [learning notes](NOTES.md) for a plain-language explanation of the code.
+Model files, caches and `.venv` remain ignored under the repository's rules. See [technical notes](NOTES.md) for an explanation of the implementation.
 
 ## Implemented: local text generation with Ollama
 
 `ollama_demo.py` sends one fixed English question to Qwen3:4b through `http://127.0.0.1:11434/api/chat`. Ollama runs the model on this computer; Python sends a JSON POST and reads its JSON response. It is a client of Ollama, not a new FastAPI server or a hosted-provider call.
 
-Verified with Ollama 0.40.9 and Python 3.12.13 on the learner's Mac. The script uses only Python's standard-library `json` and `urllib.request`; no Ollama SDK or new pip dependency was added. The shared environment's dependency files remain unchanged.
+Tested with Ollama 0.40.9 and Python 3.12.13 on macOS. The script uses Python's standard-library `json` and `urllib.request`; it does not require the Ollama Python SDK.
 
 ### Setup and one-time download
 
@@ -135,9 +133,7 @@ The request specifies `think=false`, `stream=false`, `keep_alive=0`, a 2,048-tok
 
 `get_reply` requires `done=true`, `done_reason=stop` and nonblank string content. Other finish reasons raise an error that includes the actual metadata; reaching the generation limit can leave an incomplete reply. Transport, JSON and unexpected response-shape errors are not comprehensively translated into friendly messages by this small client.
 
-The learner's successful Python request reported `done=true`, `done_reason=stop` and 246 generated tokens. Content still included planning-like text and a closing think tag before the final answer; the separate thinking field was absent. The program prints this content unchanged. Normal completion does not establish correctness, brevity or successful thinking suppression.
-
-An earlier Python request failed the completion check before its metadata was recorded. The exact cause remains unknown; a token-limit cutoff was only a hypothesis. Adding diagnostic prints did not fix the model or change its allowance. The next request was a new generation that completed normally.
+An example response reported `done=true`, `done_reason=stop` and 246 generated tokens. Content still included planning-like text and a closing think tag before the final answer; the separate thinking field was absent. The program prints this content unchanged. Normal completion does not establish correctness, brevity or successful thinking suppression.
 
 ### Reply tests and all-project tests
 
@@ -146,14 +142,13 @@ python -m unittest -v test_ollama_demo.py
 python -m unittest discover -v
 ```
 
-The Ollama file has four passing methods: accept completed text; reject an unfinished result; reject a simulated length-limited result; reject empty, whitespace-only or non-string content. The last method has three subcases. These tests call the helper with made-up dictionaries; they do not contact Ollama, run Qwen, load weights or prove the actual model's cutoff behavior. The synthetic length/256 case does not retrospectively explain the earlier failed call.
+The Ollama file has four passing methods: accept completed text; reject an unfinished result; reject a simulated length-limited result; reject empty, whitespace-only or non-string content. The last method has three subcases. These tests call the helper with controlled dictionaries; they do not contact Ollama, run Qwen, load weights or prove the actual model's cutoff behavior.
 
 Combined discovery passes all eight methods across both demos. A clean-source check using the existing interpreter also passes without copied model files or an Ollama service call. This is test isolation, not a new dependency installation or an end-to-end inference test.
 
 ### Observed limitations
 
 - `--think=false` alone still produced lengthy planning-like text. Adding `/no_think` shortened one observed reply but did not reliably suppress that text. No template-repair or model-replacement claim is made.
-- CLI examples took about 30.15 seconds (346 generated tokens) and 11.00 seconds (69 generated tokens), including roughly 9.92 and 6.75 seconds loading respectively. These are individual observations with different outputs, not a controlled benchmark or a general speed guarantee.
 - The four reply tests cover the helper's completion/content rules, not HTTP errors, every malformed JSON shape, model accuracy or all request settings.
 - The script sends one user message per request. It has no implemented conversation memory, tool execution, retrieval, application authentication or deployment.
 - Unlike API 3's hosted Groq service, this exercise uses local compute and storage. The different models and tasks were not evaluated in a fair quality/speed comparison. Neither deployment location guarantees truthful answers.

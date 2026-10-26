@@ -1,8 +1,8 @@
 # Introductory ReAct-style tool agent
 
-A small learning exercise connecting a Groq-hosted model to a permitted local Python function. It demonstrates a manual tool exchange, then an automatic bounded loop. No model is trained or downloaded.
+A Groq-hosted model connected to a permitted local Python function, with manual and automatic tool-call loops, argument validation and execution limits.
 
-ReAct combines reasoning and acting: choose a next step, take an action through a tool, use its result, and continue or answer. This exercise demonstrates that interaction pattern with native tool calls; it does not reproduce the original paper's prompting experiments or expose internal reasoning. See the [learning notes](NOTES.md) for definitions and code explanations.
+ReAct combines reasoning and acting: choose a next step, take an action through a tool, use its result, and continue or answer. This implementation demonstrates that interaction pattern with native tool calls; it does not reproduce the original paper's prompting experiments or expose internal reasoning. See the [technical notes](NOTES.md) for definitions and code explanations.
 
 ## What is implemented
 
@@ -16,9 +16,9 @@ The model is `openai/gpt-oss-120b` hosted by Groq. The arithmetic runs in Python
 
 ## Setup
 
-### Existing study environment
+### Reuse the LLM Tools API environment
 
-The learner ran these scripts using the environment from `projects/fastapi_03_llm_tools_api`. From the repository root:
+These scripts can use the compatible environment from `projects/fastapi_03_llm_tools_api`. From the repository root:
 
 ```bash
 source projects/fastapi_03_llm_tools_api/.venv/bin/activate
@@ -44,7 +44,7 @@ python -m unittest discover -v
 
 ### Credentials: live runs only
 
-Both scripts currently read `projects/fastapi_03_llm_tools_api/.env`, located relative to the script rather than the terminal's current directory. An `.env` in the agent folder is not read. This shared configuration is intentional in the present learning setup.
+Both scripts read `projects/fastapi_03_llm_tools_api/.env`, located relative to the script rather than the terminal's current directory. An `.env` in the agent folder is not read.
 
 Preserve the existing private API-3 file. For a new checkout, create it from API 3's blank `.env.example` only if it does not already exist, then enter your own `GROQ_API_KEY` privately in your editor. Do not paste a real key into source, screenshots or Git. A separate OpenAI key is not required. Live requests use Groq and are subject to your account's current model availability and limits.
 
@@ -62,7 +62,7 @@ python automatic_agent.py
 
 `tools.py` prints `432` without AI. The manual script contacts Groq, displays its tool request, and waits for Enter before calculating and making the follow-up request. The automatic script contacts Groq repeatedly as needed, within its limit. Running either agent script is live inference, not an offline test.
 
-Observed learner output for the automatic example on October 26, 2026:
+Example output from the automatic agent:
 
 ```text
 Tool call 1: multiply(18, 24) -> 432
@@ -93,7 +93,7 @@ The saved suite passes in the working environment, including a verification run 
 - Three tools may be followed by a fourth model request for the final answer. A request for a fourth tool is refused before execution. Completion/blank checks also apply; this is not an unlimited loop.
 - Each model request uses `max_completion_tokens=1024`, low reasoning effort, and no returned reasoning field. The client has a 20-second configured timeout and zero automatic retries. These are not a strict overall wall-clock deadline or a guarantee of server-side cancellation.
 - `messages` holds results only during the current run. There is no persistent memory, database logging, user authentication or deployed service.
-- Plain-text instructions request a format; they do not guarantee compliance. The earlier manual response included raw LaTeX, which a terminal prints literally.
+- Plain-text instructions request a format; they do not guarantee compliance. Terminals print any returned LaTeX notation literally.
 - This is a small ReAct-style integration exercise, not a general-purpose or production agent. Selected unit tests and one successful multi-step example do not measure broad reasoning quality, adversarial robustness or every provider/HTTP failure.
 
 ## References

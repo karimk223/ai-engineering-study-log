@@ -1,6 +1,6 @@
 # Customer-support prediction API
 
-A learning project that trains a text classifier, saves it for FastAPI serving, and logs predictions in SQLite. It uses the 11 original customer-support categories, not an LLM.
+A text-classification pipeline with a FastAPI prediction service and SQLite logging. It trains on 11 customer-support categories, saves the fitted model and retrieves stored predictions by ID.
 
 ## Current status
 
@@ -14,9 +14,8 @@ A learning project that trains a text classifier, saves it for FastAPI serving, 
 - 16 automated API/storage cases pass, including validation, saved-result retrieval and persistence across startup.
 - All 28 installed dependency versions match requirements.lock.txt; pip check reports no broken requirements.
 - A temporary clean-file rebuild from the pinned raw CSV reproduces the exact data/splits, classifier predictions and 16 passing tests using the existing pinned environment. A separate fresh dependency installation was not performed.
-- Local implementation is complete for this learning milestone; commit/push is pending.
 
-These are results on a hybrid synthetic dataset, not representative real-customer accuracy. The classifier always chooses a known category and does not reliably reject arbitrary unsupported inputs. The review-gate experiments are paused and archived separately; they are not part of the active pipeline.
+These are results on a hybrid synthetic dataset, not representative real-customer accuracy. The classifier always chooses a known category and does not reliably reject arbitrary unsupported inputs.
 
 ## Active files
 
@@ -30,11 +29,9 @@ These are results on a hybrid synthetic dataset, not representative real-custome
 - [Data source](data/SOURCE.md), [evaluation](EVALUATION.md), [notes](NOTES.md).
 - requirements.txt and requirements.lock.txt: pinned project dependencies.
 
-The old three-category, OTHER and admission-gate scripts are no longer needed to run this project. Current preparation does not depend on their files.
-
 ## Environment
 
-Continue with the existing project environment:
+To activate an existing project environment:
 
 ```bash
 source .venv/bin/activate

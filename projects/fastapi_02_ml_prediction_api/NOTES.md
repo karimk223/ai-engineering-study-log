@@ -34,4 +34,3 @@
 - Six test functions now run 16 cases: four individual, seven invalid bodies, five invalid IDs. The autouse fixture redirects DATABASE_PATH to a temporary file per case; normal app startup still creates the table. Tests use the real saved model and verify API/storage behavior, not a new accuracy estimate.
 - All 16 pass, including saved-record equality after application restart. Demo history/model stay unchanged. A known Starlette/AnyIO dependency deprecation warning is not a failing test.
 - A temporary clean-file rebuild from raw data reproduces the data, splits, trained predictions and all 16 cases using the existing pinned environment. This is not an independent fresh dependency-install test. All 28 pinned installed versions match; pip check passes.
-- Next: commit/push this completed local API milestone to the existing study-log repository. No new model/gate work or dependency installation is required.

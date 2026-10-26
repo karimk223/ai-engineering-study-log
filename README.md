@@ -1,114 +1,84 @@
-# AI Engineering Study Log
+# AI Engineering Foundations
 
-A collection of small applications built through guided practice in APIs, data storage and applied AI. Each project has its own setup, tests and notes.
+Four Python applications, supported by examples in local model inference, tool-using agents and machine learning.
 
-## Projects
+The projects connect APIs, databases and models to concrete tasks: managing customer requests, routing support messages, answering questions with tools and processing images. The focus is on the application around the model—validating inputs, executing permitted actions, saving results and handling failures.
 
-| Project | Status | What it demonstrates |
+## Core applications
+
+| Project | Stack | What it implements |
 | --- | --- | --- |
-| [Customer Requests API](projects/fastapi_01_customer_requests/README.md) | Implementation and setup verified | FastAPI, SQLite, validation, CRUD, pagination and isolated tests |
-| [ML ticket-routing API](projects/fastapi_02_ml_prediction_api/README.md) | Local implementation verified; 16 cases pass | Text classification, saved-model serving, SQLite logging and result retrieval |
-| [LLM/tools API](projects/fastapi_03_llm_tools_api/README.md) | Local implementation verified; 56 cases pass | Hosted LLM, validated native tool calls, checked JSON replies, atomic SQLite logging and failure handling |
-| [Computer vision demo](projects/computer_vision_demo/README.md) | Local implementation verified; 8 application tests pass | OpenCV preprocessing, pretrained YuNet detection, DeepFace/ArcFace pairwise verification and isolated tests |
-| [Pretrained model demos](projects/pretrained_model_demos/README.md) | Local sentiment/Ollama calls verified; 8 application tests pass | Hugging Face sentiment, local Qwen generation, token limits, reply checks and documented limitations |
-| [Introductory ReAct-style agent](projects/llm_agent_demos/README.md) | Manual/automatic tool exchanges verified; 8 offline tests pass | Hosted model, local function registry, validated arguments, result handoff and bounded iteration |
-| [Compact ML notebook](notebooks/README.md) | Learner run from a restarted kernel verified in saved outputs | Iris inspection, baseline/tree comparison, K-Means grouping and PCA visualization |
+| [Customer Requests API](projects/fastapi_01_customer_requests/README.md) | FastAPI, Pydantic, SQLite | Create, retrieve, update and delete requests; validate bodies and IDs; paginate records; preserve data across restarts |
+| [ML Ticket-Routing API](projects/fastapi_02_ml_prediction_api/README.md) | pandas, scikit-learn, Joblib, FastAPI, SQLite | Clean support messages, train a TF-IDF/logistic-regression classifier for 11 categories, serve the saved model and store predictions for retrieval |
+| [LLM Tools API](projects/fastapi_03_llm_tools_api/README.md) | Groq, FastAPI, Pydantic, SQLite | Connect a hosted language model to a fictional order lookup, validate tool arguments and JSON replies, and save conversations and tool traces together |
+| [Computer Vision](projects/computer_vision_demo/README.md) | OpenCV, YuNet, DeepFace, ArcFace | Resize and convert images, detect faces, and compare two face embeddings using cosine distance |
 
-The first project has 51 passing cases in the original, fresh-installation and grouped-project environments. Its own environment passes pip check, and the local server starts successfully from the grouped directory.
+Each application has its own README with setup instructions, API or script examples, test commands and implementation limits.
 
-## Layout
+The ticket classifier correctly labels **3,631/3,642 final-test messages (99.70%)**, against a **22.08% baseline** on the same hybrid synthetic corpus. The [evaluation report](projects/fastapi_02_ml_prediction_api/EVALUATION.md) explains the split, metrics and unsupported-input limitation.
+
+## Model and agent examples
+
+### Local pretrained models
+
+[Pretrained Model Demos](projects/pretrained_model_demos/README.md) contains two ways to run an existing model locally:
+
+- **DistilBERT sentiment classification:** Transformers loads the tokenizer and checkpoint; PyTorch runs predictions on the CPU. The script checks blank inputs and token limits before prediction.
+- **Qwen3 through Ollama:** a standard-library Python client sends a JSON request to Ollama's local API, bounds the context and output, and checks that the reply completed normally.
+
+Model sources, versions, download checksums and runtime limitations are documented with the demos.
+
+### ReAct-style tool agent
+
+[The agent project](projects/llm_agent_demos/README.md) connects a Groq-hosted model to local Python multiplication. A manual version pauses before executing a tool; an automatic version continues through tool requests and results until it answers or reaches its execution limit.
+
+The application validates the requested function and arguments before execution. The model receives the actual Python result and can use it in its next action. For example:
 
 ```text
-ai-engineering-study-log/
-  README.md
-  STUDY-LOG.md
-  .gitignore
-  notebooks/
-    ml_revision.ipynb
-    README.md
-    NOTES.md
-    requirements.txt
-  projects/
-    fastapi_01_customer_requests/
-      app/
-      tests/
-      README.md
-      NOTES.md
-      requirements.txt
-      requirements.lock.txt
-    fastapi_02_ml_prediction_api/
-      app/
-      tests/
-      inspect_data.py
-      prepare_data_full.py
-      split_data_full.py
-      train_model_full.py
-      README.md
-      NOTES.md
-      EVALUATION.md
-      requirements.txt
-      requirements.lock.txt
-      data/SOURCE.md
-    fastapi_03_llm_tools_api/
-      app/
-      tests/
-      check_llm.py
-      .env.example
-      README.md
-      NOTES.md
-      requirements.txt
-      requirements.lock.txt
-    computer_vision_demo/
-      process_image.py
-      detect_faces.py
-      compare_faces.py
-      test_process_image.py
-      test_detect_faces.py
-      test_compare_faces.py
-      README.md
-      NOTES.md
-      models.sha256
-      requirements.txt
-      requirements.lock.txt
-    pretrained_model_demos/
-      sentiment_demo.py
-      test_sentiment_demo.py
-      ollama_demo.py
-      test_ollama_demo.py
-      README.md
-      NOTES.md
-      OLLAMA-MODEL.md
-      models.sha256
-      requirements.txt
-      requirements.lock.txt
-    llm_agent_demos/
-      tools.py
-      manual_agent.py
-      automatic_agent.py
-      test_tools.py
-      test_automatic_agent.py
-      README.md
-      NOTES.md
-      requirements.txt
-      requirements.lock.txt
+Tool call 1: multiply(18, 24) -> 432
+Tool call 2: multiply(432, 3) -> 1296
+Final answer: The total cost is 1296 dollars.
 ```
 
-Run setup and test commands from the chosen project's directory. The API applications have separate environments. The agent exercise documents its existing API-3 environment/configuration reuse and an optional dedicated dependency environment.
+## Machine learning notebook
 
-[Study log](STUDY-LOG.md) records completed work and checks. The larger ingestion/RAG/agents engine and Odoo automation lab are planned as separate repositories.
+[ml_revision.ipynb](notebooks/ml_revision.ipynb) explores the Iris dataset through data inspection, a supervised baseline comparison, K-Means clustering and PCA. It includes explanations, executed outputs and a chart.
 
-The [first API milestone](https://github.com/karimk223/ai-engineering-study-log/commit/c48a4db792f6600f752b36d8c557e2bf2da4eeeb) is published. The second project's implementation is recorded in commit `c666b9d`: 99.70% final-test accuracy on its hybrid synthetic corpus, saved-model serving, SQLite logging, GET-by-ID and 16 passing cases. A clean-file rebuild using its existing pinned environment reproduces the model and tests; it was not a separate fresh dependency installation. Unused classifier/review experiments are archived outside this repository's active project.
+The decision tree correctly classifies **29/30 test flowers**, compared with **10/30** for the baseline. A separate exploratory exercise groups all 150 flowers by their standardized measurements and projects them into two PCA coordinates.
 
-The third project uses a Groq-hosted model without a local model download. It allows one read-only fictional order lookup and at most two model requests, validates the final reply format, saves completed exchanges and tool traces together, and retrieves saved chats without inference. All 56 cases pass in its own environment and a clean source copy using that same environment. The 25 dependency versions are recorded; a separate fresh dependency installation was not performed. Offline tests use no real credential or provider quota.
+![Iris flowers projected into two PCA coordinates and colored by their K-Means groups](assets/iris-pca.svg)
 
-The computer-vision exercise uses pretrained models locally on the CPU. Its eight tests cover application behavior using synthetic inputs and controlled detector/comparison replies; they are not a biometric accuracy score. Real photos, generated images, model weights and environments remain ignored. Model download sources/checksums and the distinction between detection, verification and access authorization are documented in the project.
+Each dot is one flower. Position comes from PCA; color comes from K-Means. The two coordinates retain **95.8% of standardized variance**; this is separate from classification accuracy. See the [notebook guide](notebooks/README.md) for setup and interpretation.
 
-The sentiment exercise reuses a pinned DistilBERT checkpoint for six local English examples. Four passing tests check blank and token-limit rules using a controlled tokenizer, not model accuracy. Its 34 package versions and four model-artifact checksums are recorded. The two-label model misreads neutral/likely-sarcastic examples, and a single-input native runtime crash remains unresolved despite successful batch runs. Fresh dependency installation and single-input deployment are not validated.
+## Technologies
 
-The same project also includes a standard-library Python client for local Qwen3:4b generation through Ollama. Four reply-helper tests pass without calling the service, making eight tests across both demos. The client bounds context/output and rejects unfinished/blank replies, but the tested model setup still produces unwanted planning-like text. An earlier completion failure's cause was not recorded and is not claimed fixed by later success. Ollama version/model identities and run instructions are documented; this client is not an agent, hosted deployment or representative model evaluation.
+- **APIs and storage:** FastAPI, Uvicorn, Pydantic, SQLite.
+- **Machine learning and analysis:** pandas, scikit-learn, Joblib, Matplotlib, Jupyter.
+- **Language models:** PyTorch, Transformers, Groq, Ollama.
+- **Computer vision:** OpenCV, YuNet, DeepFace, ArcFace, ONNX Runtime.
+- **Testing:** pytest, unittest and controlled model/provider responses.
 
-The introductory ReAct-style exercise connects the existing Groq-hosted model to local integer multiplication. A manual version pauses before execution; an automatic loop uses returned results for later actions and permits at most three tool executions/four model requests. A learner-run two-action example calculated 432 items and 1296 dollars. Eight offline tests check selected tool and loop rules, including refusal before a fourth tool and refusal of unknown functions. These are not a general reasoning-accuracy benchmark. A 15-package observed runtime snapshot is recorded; no separate fresh installation was verified.
+## Run locally
 
-The compact ML notebook uses the bundled Iris measurements for separate prediction and exploration exercises. On a 120/30 training/test split, its baseline gets 10/30 correct and its depth-three decision tree gets 29/30. K-Means groups all 150 standardized rows into three requested groups of 53, 50 and 47. PCA supplies two coordinates per flower with 95.8% retained variance, and the chart colors those coordinates by the existing K-Means groups. Retained variance is separate from species-prediction accuracy. Four direct dependency versions and setup instructions are recorded. The learner completed notebook cleanup and a run from a restarted kernel; the seven saved code cells run in order without errors and retain the results and chart. Small backend exercises and the final repository review remain.
+Use Python 3.12 and a separate environment for each project. The Customer Requests API is the quickest starting point because it needs no model download or API key. It requires SQLite 3.35 or later.
 
-These are local learning applications, not authenticated cloud deployments. The classifier does not reliably reject arbitrary unsupported input, and API 3's controlled-response tests are not a real-model accuracy score. Its saved logs are not conversation memory. The vision demo is not an identification gallery or liveness/access-control system. Further study-log projects remain planned rather than completed skills; see each project's README for exact scope and limitations.
+```bash
+git clone https://github.com/karimk223/ai-engineering-study-log.git
+cd ai-engineering-study-log/projects/fastapi_01_customer_requests
+
+python3.12 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python -m pytest -q
+python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+Open [Swagger UI](http://127.0.0.1:8000/docs) to try the routes. The commands above use macOS/Linux activation syntax.
+
+The three APIs use ports **8000**, **8001** and **8002**. Follow the relevant project README for model preparation, a private Groq key or Ollama setup. Dependencies and configuration differ between projects; there is no shared repository-wide environment. Datasets, model weights, private photos, credentials and generated databases are kept out of Git.
+
+## Testing and scope
+
+The API suites contain **51**, **16** and **56** passing cases respectively. The computer-vision, pretrained-model and agent projects each have **8** passing application tests. They cover validation, persistence, controlled model/tool interactions and selected failure paths; they are not general model-accuracy benchmarks. Each README records the test commands and environment verification details.
+
+These are local applications and integration examples, with no implemented user authentication or production deployment. Dataset and model limitations—including unsupported ticket categories, the sentiment demo's single-input runtime issue and unwanted Ollama planning text—are described in the relevant project READMEs. Technical notes explain the main concepts and design choices.

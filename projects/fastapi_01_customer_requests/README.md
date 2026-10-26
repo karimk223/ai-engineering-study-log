@@ -1,6 +1,6 @@
 # Customer Requests API
 
-A FastAPI application that creates, retrieves, updates, deletes and lists customer requests in SQLite. This is backend practice for the AI engineering study log.
+A FastAPI application that creates, retrieves, updates, deletes and lists customer requests in SQLite, with input validation, pagination and automated persistence tests.
 
 ## Setup and run
 
@@ -17,9 +17,9 @@ python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 
 Open [Swagger documentation](http://127.0.0.1:8000/docs) or [health](http://127.0.0.1:8000/health). Ctrl+C stops the server. Reload mode is for local development.
 
-Requirements use the installed versions recorded in requirements.lock.txt, including Pydantic 1.10.26. Original, fresh-installation and grouped-project environments passed 51 tests on Python 3.12.13/macOS with SQLite 3.53.0. The grouped app's own environment passes pip check and its server starts successfully. The snapshot pins versions without artifact hashes or a guarantee for all platforms.
+Requirements use the versions recorded in requirements.lock.txt, including Pydantic 1.10.26. The suite passes 51 cases on Python 3.12.13/macOS with SQLite 3.53.0, including verification in a fresh dependency installation. The snapshot pins versions without artifact hashes or a guarantee for all platforms.
 
-Startup creates customer_requests.db and its table if absent. Existing records in that file remain across normal restarts. This grouped copy starts with a new database; previous practice records remain in the original local project.
+Startup creates customer_requests.db and its table if absent. Existing records in that file remain across normal restarts.
 
 ## API
 

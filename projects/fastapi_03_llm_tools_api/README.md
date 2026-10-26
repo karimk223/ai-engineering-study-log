@@ -1,6 +1,6 @@
 # LLM Tools API
 
-A guided-practice FastAPI application that uses Groq-hosted `openai/gpt-oss-120b` for short replies and a controlled, read-only fictional order lookup. This project uses a pretrained hosted model; it does not train or download a local LLM.
+A FastAPI application using Groq-hosted `openai/gpt-oss-120b` for short replies and a controlled, read-only fictional order lookup. It validates tool requests and final replies, and stores completed exchanges in SQLite.
 
 ## What is implemented
 
@@ -15,7 +15,7 @@ The fictional orders are 101 = processing, 102 = shipped and 103 = delivered. Un
 
 ## Setup
 
-Run commands from this project's directory, not the repository root. Keep each study-log project's environment separate: this application uses Pydantic 2.
+Run commands from this project's directory. Use a separate environment for this application, which requires Pydantic 2.
 
 For a new checkout, use Python 3.12:
 
@@ -34,7 +34,7 @@ If this project already has its working `.venv`, activate it instead of recreati
 
 For live use, create a local `.env` from `.env.example` only if `.env` does not already exist. Fill in `GROQ_API_KEY` privately in your editor. Preserve an existing configured file; do not overwrite it or paste its contents into logs, screenshots or Git.
 
-Use your own Groq credential. This application calls Groq with the Groq SDK; it does not require an OpenAI API key. Keep the project's free-plan approach; no billing upgrade or local model download is part of setup. Live requests are subject to the account's current model availability and limits.
+Use your own Groq credential. This application calls Groq with the Groq SDK; it does not require an OpenAI API key. Live requests are subject to the account's model availability and limits.
 
 The application reads `.env` at startup and refuses to start with a missing or blank key. It does not verify the key with a live request at startup. The health endpoint does not establish provider connectivity.
 
@@ -117,14 +117,14 @@ Chat IDs are bounded to 1–9,223,372,036,854,775,807. SQLite creation timestamp
 
 ## Verification and limits
 
-Verified October 21, 2026: the saved local suite passes 56 cases and `pip check` reports no broken requirements. Tests cover successful chats/lookups, stored traces, strict input/tool/final-output validation, bounded tool execution, provider failures at either stage, invalid/missing IDs, database reinitialization and transaction rollback.
+The local suite passes 56 cases and `pip check` reports no broken requirements. Tests cover successful chats/lookups, stored traces, strict input/tool/final-output validation, bounded tool execution, provider failures at either stage, invalid/missing IDs, database reinitialization and transaction rollback.
 
 A clean source/configuration copy also passes all 56 cases using the existing verified interpreter and installed packages. That copy excludes the real `.env`, `chats.db`, environment and caches; imports were checked to resolve to the copied application. This verifies clean-file operation without a key, not a separate fresh dependency installation. All 25 recorded dependency versions match the installed snapshot.
 
-Tests supply controlled model responses. They verify application behavior, not a real-model accuracy percentage. Earlier manual Groq/Swagger checks confirmed live connectivity and a real order-tool response; those calls are separate from the offline suite.
+Tests supply controlled model responses. They verify application behavior, not a real-model accuracy percentage. Live connectivity and an order-tool response have also been checked separately from the offline suite.
 
 This is a localhost learning demo, not a production deployment. It has no authentication, ownership checks, public-service rate limiting or real order access. Do not expose it publicly or use sensitive customer data. Prompt instructions do not guarantee that the model always chooses the correct tool, order ID or wording. There is no conversation memory: each POST starts a fresh exchange; GET only reads saved records.
 
 `.env`, `.venv`, caches and `*.db` are ignored by the repository. Only the blank credential template is intended for Git. Keep private credentials and generated databases out of commits.
 
-See [learning notes](NOTES.md) and [Groq's model documentation](https://console.groq.com/docs/model/openai/gpt-oss-120b).
+See [technical notes](NOTES.md) and [Groq's model documentation](https://console.groq.com/docs/model/openai/gpt-oss-120b).

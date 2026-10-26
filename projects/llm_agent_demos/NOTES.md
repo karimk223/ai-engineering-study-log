@@ -20,7 +20,7 @@ The question supplies 18 boxes, 24 items per box, and a price of 3 dollars per i
 4. Python returns `1296`: the total cost.
 5. The model writes its final answer.
 
-Karim's October 26 run showed those two real local tool executions followed by the 1296-dollar answer. Arithmetic is deliberately simple so the model/tool handoff is visible. The same interaction idea appears in API 3's fictional order-status lookup, but this agent is not connected to that order tool.
+The example executes those two local calculations and returns the 1296-dollar answer. Arithmetic is deliberately simple so the model/tool handoff is visible. The same interaction idea appears in API 3's fictional order-status lookup, but this agent is not connected to that order tool.
 
 ## What is a tool?
 

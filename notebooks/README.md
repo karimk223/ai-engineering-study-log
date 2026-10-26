@@ -1,6 +1,6 @@
-# Compact ML revision notebook
+# Iris ML Exploration
 
-[ml_revision.ipynb](ml_revision.ipynb) uses one small flower table to practise three different tasks:
+[ml_revision.ipynb](ml_revision.ipynb) explores three tasks using the Iris flower dataset:
 
 - **Prediction:** learn species names from labeled examples, then check guesses on other flowers.
 - **Grouping:** put flowers with similar measurements together without supplying species names.
@@ -10,9 +10,9 @@ The notebook uses scikit-learn's bundled Iris dataset: 150 flowers, four numeric
 
 ## Setup and run
 
-The observed learner run used Python 3.12.13 in the existing `projects/fastapi_02_ml_prediction_api/.venv` environment, with notebook and plotting packages added during setup. The four direct package versions used by this notebook are recorded in [requirements.txt](requirements.txt). They are direct pins, not a lock of every transitive dependency.
+Use Python 3.12. The four direct package versions are pinned in [requirements.txt](requirements.txt); transitive dependencies are not fully locked. The notebook has been executed with Python 3.12.13.
 
-For a separate notebook environment, run these commands from the repository root:
+Create a notebook environment from the repository root:
 
 ```bash
 python3.12 -m venv notebooks/.venv
@@ -22,14 +22,14 @@ notebooks/.venv/bin/python -m pip install -r notebooks/requirements.txt
 In VS Code:
 
 1. Enable the Python and Jupyter extensions and open `notebooks/ml_revision.ipynb`.
-2. Select the notebook environment's Python as its kernel. For the setup above, use `notebooks/.venv/bin/python`; the existing learner environment also works.
+2. Select `notebooks/.venv/bin/python` as the notebook kernel.
 3. Restart the kernel, run all cells from the top, and save the notebook with its outputs and chart. Dependencies are installed during setup rather than inside the exercise cells.
 
-The learner completed the cleanup and reported restarting the kernel and running all cells. The saved notebook confirms seven code cells executed in order from 1 to 7, no saved errors, matching numeric results, an embedded chart and a final explanatory Markdown cell. The separate environment installation above has not been performed or verified. The current environment passes `pip check`.
+The saved notebook contains executed results, an embedded chart and a concluding explanation. Execution was verified in the existing compatible environment; the separate environment setup above has not been independently verified.
 
 ## Observed results
 
-| Exercise | Learner-run result |
+| Exercise | Result |
 | --- | --- |
 | Inspect data | 150 rows, four measurement columns, zero missing measurements |
 | Training/test split | 120 training flowers, 30 test flowers; stratified, seed 42 |
@@ -45,6 +45,6 @@ The tree learns only from the training flowers. Its test result is a small demon
 
 Each dot is one flower. PCA supplies its horizontal and vertical coordinates, and K-Means supplies its group color. The decision tree is a separate prediction experiment and does not supply the chart's colors. Group IDs are arbitrary and have not been evaluated against the true species.
 
-PCA makes two summary numbers from four measurements, losing some detail. Its 95.8% retained-variance figure concerns that numerical representation, while the tree's 96.7% figure concerns correct species guesses. The learning notes explain the difference with examples.
+PCA makes two summary numbers from four measurements, losing some detail. Its 95.8% retained-variance figure concerns that numerical representation, while the tree's 96.7% figure concerns correct species guesses. The technical notes explain the difference with examples.
 
 See [NOTES.md](NOTES.md) for plain-language definitions, the whole exercise's story, PCA examples and the exact evidence behind these observations. The notebook's embedded chart can be kept in Git; environments, notebook checkpoints and package caches should remain excluded.

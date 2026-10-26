@@ -1,6 +1,6 @@
 # Computer vision demo
 
-A local learning exercise in image processing, face detection and pairwise face verification. The models are pretrained; this project does not train a detector or recognition network.
+Local image processing, face detection and pairwise face verification using OpenCV, YuNet and DeepFace/ArcFace. The models are pretrained.
 
 | Script | Input | Result |
 | --- | --- | --- |
@@ -73,7 +73,7 @@ python compare_faces.py
 
 Run in that order: detection depends on the resized output. Comparison independently uses the two original photos, configures the ignored `storage` cache before importing DeepFace, and selects ONNX/CPU. It prints a 512-number embedding dimension, not the biometric vectors themselves. Once the packages and verified assets are cached, no further model download is needed by this workflow.
 
-The installed ArcFace/cosine default cutoff is `0.68`; `distance <= threshold` yields a predicted match. Distance and threshold are not confidence percentages. See [learning notes](NOTES.md) for interpretation.
+The installed ArcFace/cosine default cutoff is `0.68`; `distance <= threshold` yields a predicted match. Distance and threshold are not confidence percentages. See [technical notes](NOTES.md) for interpretation.
 
 ## Evidence, privacy and limitations
 
