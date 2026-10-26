@@ -11,6 +11,7 @@ A collection of small applications built through guided practice in APIs, data s
 | [LLM/tools API](projects/fastapi_03_llm_tools_api/README.md) | Local implementation verified; 56 cases pass | Hosted LLM, validated native tool calls, checked JSON replies, atomic SQLite logging and failure handling |
 | [Computer vision demo](projects/computer_vision_demo/README.md) | Local implementation verified; 8 application tests pass | OpenCV preprocessing, pretrained YuNet detection, DeepFace/ArcFace pairwise verification and isolated tests |
 | [Pretrained model demos](projects/pretrained_model_demos/README.md) | Local sentiment/Ollama calls verified; 8 application tests pass | Hugging Face sentiment, local Qwen generation, token limits, reply checks and documented limitations |
+| [Introductory ReAct-style agent](projects/llm_agent_demos/README.md) | Manual/automatic tool exchanges verified; 8 offline tests pass | Hosted model, local function registry, validated arguments, result handoff and bounded iteration |
 
 The first project has 51 passing cases in the original, fresh-installation and grouped-project environments. Its own environment passes pip check, and the local server starts successfully from the grouped directory.
 
@@ -74,9 +75,19 @@ ai-engineering-study-log/
       models.sha256
       requirements.txt
       requirements.lock.txt
+    llm_agent_demos/
+      tools.py
+      manual_agent.py
+      automatic_agent.py
+      test_tools.py
+      test_automatic_agent.py
+      README.md
+      NOTES.md
+      requirements.txt
+      requirements.lock.txt
 ```
 
-Run setup and test commands from the chosen project's directory. Dependencies and environments are separate for each application.
+Run setup and test commands from the chosen project's directory. The API applications have separate environments. The agent exercise documents its existing API-3 environment/configuration reuse and an optional dedicated dependency environment.
 
 [Study log](STUDY-LOG.md) records completed work and checks. The larger ingestion/RAG/agents engine and Odoo automation lab are planned as separate repositories.
 
@@ -88,6 +99,8 @@ The computer-vision exercise uses pretrained models locally on the CPU. Its eigh
 
 The sentiment exercise reuses a pinned DistilBERT checkpoint for six local English examples. Four passing tests check blank and token-limit rules using a controlled tokenizer, not model accuracy. Its 34 package versions and four model-artifact checksums are recorded. The two-label model misreads neutral/likely-sarcastic examples, and a single-input native runtime crash remains unresolved despite successful batch runs. Fresh dependency installation and single-input deployment are not validated.
 
-The same project also includes a standard-library Python client for local Qwen3:4b generation through Ollama. Four reply-helper tests pass without calling the service, making eight tests across both demos. The client bounds context/output and rejects unfinished/blank replies, but the tested model setup still produces unwanted planning-like text. An earlier completion failure's cause was not recorded and is not claimed fixed by later success. Ollama version/model identities and run instructions are documented; this client is not an agent, hosted deployment or representative model evaluation. ReAct and the remaining study-log exercises are still planned.
+The same project also includes a standard-library Python client for local Qwen3:4b generation through Ollama. Four reply-helper tests pass without calling the service, making eight tests across both demos. The client bounds context/output and rejects unfinished/blank replies, but the tested model setup still produces unwanted planning-like text. An earlier completion failure's cause was not recorded and is not claimed fixed by later success. Ollama version/model identities and run instructions are documented; this client is not an agent, hosted deployment or representative model evaluation.
+
+The introductory ReAct-style exercise connects the existing Groq-hosted model to local integer multiplication. A manual version pauses before execution; an automatic loop uses returned results for later actions and permits at most three tool executions/four model requests. A learner-run two-action example calculated 432 items and 1296 dollars. Eight offline tests check selected tool and loop rules, including refusal before a fourth tool and refusal of unknown functions. These are not a general reasoning-accuracy benchmark. A 15-package observed runtime snapshot is recorded; no separate fresh installation was verified. Compact ML revision/experiments, small backend exercises and the final repository review remain planned.
 
 These are local learning applications, not authenticated cloud deployments. The classifier does not reliably reject arbitrary unsupported input, and API 3's controlled-response tests are not a real-model accuracy score. Its saved logs are not conversation memory. The vision demo is not an identification gallery or liveness/access-control system. Further study-log projects remain planned rather than completed skills; see each project's README for exact scope and limitations.
